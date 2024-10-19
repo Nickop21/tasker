@@ -1,5 +1,5 @@
 
-# Task Management Application Tasker
+# Task Management Application
 
 ## Setup Instructions
 
@@ -41,6 +41,14 @@ Open your browser: Navigate to http://localhost:3000 to view the application.
 
 This Task Management Application allows users to create, update, complete, and delete tasks. Each task can be prioritized, making it easier to manage daily responsibilities. The application features a user-friendly interface built using React and Next.js, with state management handled through React's `useState` and `useEffect` hooks.
 
+## Key Functionalities
+
+### Search Functionality
+Users can easily search for tasks using a search bar. This feature allows for quick filtering of tasks based on keywords found in their titles or content, enhancing the usability and efficiency of the application.
+
+### Local Storage
+The application implements local storage to store and retrieve tasks. This ensures that tasks remain persistent even after refreshing the page or closing the browser. Users can add, edit, or delete tasks, and their changes will be saved automatically.
+
 ### Approach to Sorting Tasks by Priority
 
 Tasks can be assigned a priority level (e.g., low, medium, high), allowing users to sort tasks based on their urgency. The sorting mechanism leverages JavaScript's `Array.prototype.sort()` method, which compares tasks based on their priority levels. 
@@ -62,6 +70,10 @@ Each priority level is represented by a numerical value (e.g., low = 1, medium =
 **Sorting by Priority:** Tasks can be sorted by priority for better management.
 
 **progressbar:** Provide extra feature progressbar to easier to track the tasks progress 
+
+**Search Tasks:** Quickly find tasks using the search bar.
+
+**Local Storage:** Automatically saves and retrieves tasks for persistence.
 
 
 
