@@ -162,7 +162,7 @@ function TaskCard({ taskData, onTaskDeleted, onTaskCompleted ,onTaskUpdated}) {
   
   return (
     <div
-      className={`relative w-full min-h-[180px] md:w-[48%] flex gap-5 p-6 rounded-lg border-[1px] ${colors[randomIndex]} shadow-md transition-all duration-300 transform ${
+      className={`relative w-full min-h-[180px] md:w-[48%] flex gap-5 p-6 rounded-lg border-[1px]  ${taskData.perority=="high" && "bg-gradient-to-r from-red-100 "}   ${taskData.perority=="medium" && "bg-gradient-to-r from-yellow-100 via-yellow-100"} ${taskData.perority=="low" && "bg-gradient-to-r from-green-100 via-green-200"} shadow-md transition-all duration-300 transform ${
          "opacity-100 scale-100"
       }`}
     >
