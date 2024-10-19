@@ -1,24 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 
-function TaskCard({ taskData, onTaskDeleted, onTaskCompleted }) {
+function TaskCard({ taskData, onTaskDeleted, onTaskCompleted ,onTaskUpdated}) {
   const [isToastOpen, setIsToastOpen] = useState(false);
   const [isToastOpenForEdit, setIsToastOpenForEdit] = useState(false);
   const [titleUpdate, setTitleUpdate] = useState(taskData.title || "");
   const [contentUpdate, setContentUpdate] = useState(taskData.content || "");
-
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(taskData.taskStatus || false);
 
   const titleInputRef = useRef(null);
   const contentTextAreaRef = useRef(null);
 
   useEffect(() => {
-    // Automatically focus on the title input when edit modal is opened
     if (isToastOpenForEdit && titleInputRef.current) {
       titleInputRef.current.focus();
     }
-  }, [isToastOpenForEdit]);
+  }, [titleUpdate,isToastOpenForEdit]);
+
+  useEffect(() => {
+    if (isToastOpenForEdit && contentTextAreaRef.current) {
+      contentTextAreaRef.current.focus();
+    }
+  }, [contentUpdate,isToastOpenForEdit]);
 
   const colors = [
     "border-[rgba(233,216,244,1)] bg-gradient-to-r from-transparent via-[rgba(233,216,244,0.32)] to-[rgba(255,255,255,0)]",
@@ -103,12 +105,13 @@ function TaskCard({ taskData, onTaskDeleted, onTaskCompleted }) {
                   onChange={(e) => setTitleUpdate(e.target.value)}
                   ref={titleInputRef}
                 />
-                <textarea
+                <input
+                type="text"
                   name="updated Task"
                   maxLength={200}
                   value={contentUpdate}
                   placeholder="Update your content"
-                  className="w-full p-1 resize-none bg-violet-100 min-h-8 text-black font-normal text-sm"
+                  className="w-full p-1 resize-none bg-violet-100 min-h-16 text-black font-normal text-sm"
                   onChange={(e) => setContentUpdate(e.target.value)}
                   ref={contentTextAreaRef}
                 />
@@ -137,20 +140,30 @@ function TaskCard({ taskData, onTaskDeleted, onTaskCompleted }) {
   }
 
   function UpdateTaskDetails() {
+    
     const tasks = JSON.parse(localStorage.getItem("todos")) || [];
+    
+    // Update the specific task based on task ID
     const updatedTasks = tasks.map((task) =>
       task.id === taskData.id
         ? { ...task, title: titleUpdate, content: contentUpdate }
         : task
     );
+  
+    // Save the updated tasks back to localStorage
     localStorage.setItem("todos", JSON.stringify(updatedTasks));
+  
+    if (onTaskUpdated) {
+      onTaskUpdated({ ...taskData, title: titleUpdate, content: contentUpdate });
+    }
+  
     setIsToastOpenForEdit(false);
   }
-
+  
   return (
     <div
       className={`relative w-full min-h-[180px] md:w-[48%] flex gap-5 p-6 rounded-lg border-[1px] ${colors[randomIndex]} shadow-md transition-all duration-300 transform ${
-        isDeleting ? "opacity-0 scale-90" : "opacity-100 scale-100"
+         "opacity-100 scale-100"
       }`}
     >
       <Popup />

@@ -1,18 +1,15 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
 import AddNewTask from "../../components/addNewTask";
 import TaskCard from "../../components/taskCard";
 import { useEffect, useState } from "react";
 import TaskCardSkeleton from "../../components/taskCardSkeleton";
-import Progressbar from "../../components/progressBar";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentActive, setCurrentActive] = useState(0);
 
-  const options = ["All", "High Priority", "Medium Priority", "Low Priority"];
+  const options = ["All", "High priority", "Medium priority", "Low priority"];
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("todos")) || [];
@@ -46,23 +43,20 @@ export default function Home() {
     window.dispatchEvent(event);
   }
 
-
   // Function to handle updating an existing task
-function handleTaskUpdate(updatedTask) {
-  const updatedTasks = todos.map((task) =>
-    task.id === updatedTask.id ? updatedTask : task
-  );
+  function handleTaskUpdate(updatedTask) {
+    const updatedTasks = todos.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
 
-  setTodos(updatedTasks); // Update the state
-  localStorage.setItem("todos", JSON.stringify(updatedTasks)); // Update localStorage
-}
-
+    setTodos(updatedTasks);
+    localStorage.setItem("todos", JSON.stringify(updatedTasks));
+  }
 
   // Function to handle search input change
   function handleSearchChange(event) {
     setSearchQuery(event.target.value);
   }
-
 
   // Function to filter tasks based on the active priority filter
   function filterByPriority(task) {
@@ -86,38 +80,35 @@ function handleTaskUpdate(updatedTask) {
   );
 
   function Card(filtertodo) {
-    return(
+    return (
       <div className="flex gap-4 mt-10 pb-10 flex-wrap">
-      {filtertodo.length > 0 ? (
-        <>
-          {filtertodo.map((data) => (
-            <TaskCard
-              key={data.id}
-              taskData={data}
-              onTaskDeleted={() => handleTaskDelete(data.id)}
-              onTaskCompleted={() => handleTaskComplete(data.id)}
-              onTaskUpdated={handleTaskUpdate} 
-
-            />
-          ))}
-        </>
-      ) : (
-        <>
-          <TaskCardSkeleton />
-        </>
-      )}
-    </div>
-    )
-    
+        {filtertodo.length > 0 ? (
+          <>
+            {filtertodo.map((data) => (
+              <TaskCard
+                key={data.id}
+                taskData={data}
+                onTaskDeleted={() => handleTaskDelete(data.id)}
+                onTaskCompleted={() => handleTaskComplete(data.id)}
+                onTaskUpdated={handleTaskUpdate}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            <TaskCardSkeleton />
+          </>
+        )}
+      </div>
+    );
   }
-
 
   return (
     <main className="max-w-7xl mx-auto p-4">
       <AddNewTask onAddTask={handleAddTask} />
       <input
         type="text"
-        placeholder="Search tasks..."
+        placeholder="search tasks..."
         value={searchQuery}
         onChange={handleSearchChange}
         className="mt-4 p-2 border rounded w-full bg-white text-black outline-none"
@@ -130,7 +121,7 @@ function handleTaskUpdate(updatedTask) {
             className={`p-4 font-bold text-xs rounded-xl cursor-pointer mt-10 ${
               currentActive === index
                 ? "bg-[#FFFFFF] text-[#6947BF] transition-colors ease-linear duration-500"
-                : "text-[#98A1BB]"
+                : "text-[#495064]"
             }`}
             key={index}
             onClick={() => setCurrentActive(index)}
@@ -140,12 +131,14 @@ function handleTaskUpdate(updatedTask) {
         ))}
       </div>
       {/* UnCompleted TODOS */}
-      
+
       {Card(filteredTasks)}
 
       {/* Completed TODOS */}
-      <div className="mt-5 text-xl font-extrabold text-[#6947BF]">Completed Tasks</div>
-     {Card(filteredTasksCompleted)}
+      <div className="mt-5 text-xl font-extrabold text-[#6947BF]">
+        Completed Tasks
+      </div>
+      {Card(filteredTasksCompleted)}
     </main>
   );
 }

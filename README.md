@@ -1,7 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Task Management Application Tasker
 
+## Setup Instructions
+
+To set up and run the Task Management Application locally, follow these steps:
+
+### Prerequisites
+
+- Ensure you have [Node.js](https://nodejs.org/) installed on your machine (latest version ).
+- You should have [npm](https://www.npmjs.com/) (Node Package Manager) installed, which usually comes with Node.js.
+
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Nickop21/tasker.git
+   cd task-management-app
+ **Install the dependencies:**
+
+npm install
+
+### Run the application:
 First, run the development server:
 
 ```bash
@@ -14,23 +34,36 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser: Navigate to http://localhost:3000 to view the application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Description
 
-## Learn More
+This Task Management Application allows users to create, update, complete, and delete tasks. Each task can be prioritized, making it easier to manage daily responsibilities. The application features a user-friendly interface built using React and Next.js, with state management handled through React's `useState` and `useEffect` hooks.
 
-To learn more about Next.js, take a look at the following resources:
+### Approach to Sorting Tasks by Priority
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Tasks can be assigned a priority level (e.g., low, medium, high), allowing users to sort tasks based on their urgency. The sorting mechanism leverages JavaScript's `Array.prototype.sort()` method, which compares tasks based on their priority levels. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Each priority level is represented by a numerical value (e.g., low = 1, medium = 2, high = 3).
 
-## Deploy on Vercel
+ When tasks are sorted, they are arranged in ascending order, ensuring that high-priority tasks appear at the top of the list.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Features
+**Create Tasks:** Users can add new tasks with titles and content.
+
+**Update Tasks:** Users can edit existing tasks.
+
+**Delete Tasks:** Users can remove tasks, with a confirmation prompt.
+
+**Complete Tasks:** Users can mark tasks as completed.
+
+**Sorting by Priority:** Tasks can be sorted by priority for better management.
+
+**progressbar:** Provide extra feature progressbar to easier to track the tasks progress 
+
+
+
+
+
