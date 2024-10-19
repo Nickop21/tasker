@@ -4,6 +4,8 @@ import styles from "./page.module.css";
 import AddNewTask from "../../components/addNewTask";
 import TaskCard from "../../components/taskCard";
 import { useEffect, useState } from "react";
+import TaskCardSkeleton from "../../components/taskCardSkeleton";
+import Progressbar from "../../components/progressBar";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -13,7 +15,6 @@ export default function Home() {
   const options = ["All", "High Priority", "Medium Priority", "Low Priority"];
 
   useEffect(() => {
-    // Load tasks from local storage when the component mounts
     const storedTasks = JSON.parse(localStorage.getItem("todos")) || [];
     setTodos(storedTasks);
   }, []);
@@ -32,10 +33,36 @@ export default function Home() {
     localStorage.setItem("todos", JSON.stringify(updatedTasks));
   }
 
+  function handleTaskComplete(taskId) {
+    const updatedTasks = todos.map((task) =>
+      task.id === taskId ? { ...task, taskStatus: !task.taskStatus } : task
+    );
+
+    setTodos(updatedTasks);
+    localStorage.setItem("todos", JSON.stringify(updatedTasks));
+
+    // Emit custom event to update the progress bar
+    const event = new Event("taskUpdated");
+    window.dispatchEvent(event);
+  }
+
+
+  // Function to handle updating an existing task
+function handleTaskUpdate(updatedTask) {
+  const updatedTasks = todos.map((task) =>
+    task.id === updatedTask.id ? updatedTask : task
+  );
+
+  setTodos(updatedTasks); // Update the state
+  localStorage.setItem("todos", JSON.stringify(updatedTasks)); // Update localStorage
+}
+
+
   // Function to handle search input change
   function handleSearchChange(event) {
     setSearchQuery(event.target.value);
   }
+
 
   // Function to filter tasks based on the active priority filter
   function filterByPriority(task) {
@@ -50,7 +77,40 @@ export default function Home() {
     .filter((task) =>
       task.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    .filter(filterByPriority);
+    .filter(filterByPriority)
+    .filter((task) => task.taskStatus !== true);
+
+  // completed filter
+  const filteredTasksCompleted = todos.filter(
+    (task) => task.taskStatus == true
+  );
+
+  function Card(filtertodo) {
+    return(
+      <div className="flex gap-4 mt-10 pb-10 flex-wrap">
+      {filtertodo.length > 0 ? (
+        <>
+          {filtertodo.map((data) => (
+            <TaskCard
+              key={data.id}
+              taskData={data}
+              onTaskDeleted={() => handleTaskDelete(data.id)}
+              onTaskCompleted={() => handleTaskComplete(data.id)}
+              onTaskUpdated={handleTaskUpdate} 
+
+            />
+          ))}
+        </>
+      ) : (
+        <>
+          <TaskCardSkeleton />
+        </>
+      )}
+    </div>
+    )
+    
+  }
+
 
   return (
     <main className="max-w-7xl mx-auto p-4">
@@ -60,8 +120,10 @@ export default function Home() {
         placeholder="Search tasks..."
         value={searchQuery}
         onChange={handleSearchChange}
-        className="mt-4 p-2 border rounded w-full bg-white text-black outline-dotted"
+        className="mt-4 p-2 border rounded w-full bg-white text-black outline-none"
       />
+
+      {/* FILTER DATA ASCC TO PERORITY  */}
       <div className="flex items-center sm:gap-4 flex-wrap mb-4 ">
         {options.map((opt, index) => (
           <div
@@ -77,15 +139,13 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <div className="flex gap-4 mt-10 flex-wrap">
-        {filteredTasks.map((data) => (
-          <TaskCard
-            key={data.id}
-            taskData={data}
-            onTaskDeleted={() => handleTaskDelete(data.id)}
-          />
-        ))}
-      </div>
+      {/* UnCompleted TODOS */}
+      
+      {Card(filteredTasks)}
+
+      {/* Completed TODOS */}
+      <div className="mt-5 text-xl font-extrabold text-[#6947BF]">Completed Tasks</div>
+     {Card(filteredTasksCompleted)}
     </main>
   );
 }

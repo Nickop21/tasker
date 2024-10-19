@@ -1,49 +1,48 @@
 import React, { useEffect, useState } from "react";
-
-// Import react-circular-progressbar module and styles
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-let percentage = 0;
-
-
 function Progressbar() {
-  
-  
-    const [percentage, setPercentage] = useState(0);
-  
-    // useEffect(() => {
-    //   let totalcompleted=0
-    //   let arraysize=todos.length
-    //   if (arraysize==0) arraysize=1
-    // todos.map((data)=>(
-    //   data.completed==true && (totalcompleted=totalcompleted+1)
-    // ));
+  const [percentage, setPercentage] = useState(0);
 
-    //  let acuuratepercentage = (totalcompleted / arraysize) * 100;
-    // setPercentage(Math.round(acuuratepercentage))
+  function calculateProgress() {
+    const todoTasks = JSON.parse(localStorage.getItem("todos")) || [];
+    let totalCompleted = 0;
+    let arraySize = todoTasks.length;
+    if (arraySize === 0) arraySize = 1;
 
-    // }, [todos]);
-   
+    todoTasks.forEach((data) => {
+      if (data.taskStatus) totalCompleted += 1;
+    });
 
-  
+    const accuratePercentage = (totalCompleted / arraySize) * 100;
+    setPercentage(Math.round(accuratePercentage));
+  }
+
+  useEffect(() => {
+    calculateProgress();
+
+    const updateProgressBar = () => {
+      calculateProgress();
+    };
+
+    window.addEventListener("taskUpdated", updateProgressBar);
+    return () => window.removeEventListener("taskUpdated", updateProgressBar);
+  }, []);
+
   return (
-    
-  <div style={{ width: 150, padding: "2px", margin: "0 auto" }}>
-  <CircularProgressbar
-    value={10}
-    text={`${10}%`}
-    styles={buildStyles({
-      textColor: "black",
-      pathColor: "rgb(145 229 154 / 95%)",
-      trailColor: "black",
-    })}
-  />
-</div>
-  )
+    <div className="w-[100px] md:w-[180px]" style={{  margin: "0 auto" }}>
+      <CircularProgressbar
+        value={percentage}
+        text={`${percentage}%`}
+        styles={buildStyles({
+          textColor: "black",
+          pathColor: "rgb(145 229 154 / 95%)",
+          trailColor: "#7A8196"
+        })}
+      />
+    </div>
+  );
 }
-
-
- 
 
 export default Progressbar;
